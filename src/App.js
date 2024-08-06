@@ -1,10 +1,14 @@
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import './App.css';
+import React from 'react';
+// import { Route, Switch } from 'react-router-dom';
+import HomeView from './views/HomeView';
+import { Route, Routes } from 'react-router-dom';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
+      {/* <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
           Edit <code>src/App.js</code> and save to reload.
@@ -17,7 +21,15 @@ function App() {
         >
           Learn React
         </a>
-      </header>
+      </header> */}
+      
+      {/* <HomeView /> */}
+      
+      <Routes>
+         <Route path='/' element={<HomeView/>} />
+         {/* <Route path='/about' element={<About/>} />
+         <Route path='/contact' element={<Contact/>} /> */}
+       </Routes>
     </div>
   );
 }

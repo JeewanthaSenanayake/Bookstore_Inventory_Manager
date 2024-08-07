@@ -3,16 +3,20 @@ import { createSlice } from '@reduxjs/toolkit'
 export const ecomstorageSlice = createSlice({
   name: 'ecomstorage',
   initialState: {
-    vendorData:{}
+    vendorData:{},
+    rowData:[]
   },
   reducers: {  
     setVendorData: (state, action) => {
       state.vendorData = action.payload
     },
+    setRowData: (state, action) => {
+      state.rowData = action.payload
+    },
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { setVendorData } = ecomstorageSlice.actions
+export const { setVendorData,setRowData } = ecomstorageSlice.actions
 
 export default ecomstorageSlice.reducer

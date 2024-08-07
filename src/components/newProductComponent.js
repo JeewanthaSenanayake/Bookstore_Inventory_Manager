@@ -1,28 +1,83 @@
 import React, { useRef, useState } from "react";
-import { Box, TextField, Grid, Button } from '@mui/material';
+import { Box, TextField, Grid, Button, Alert } from '@mui/material';
+import CircularProgress from '@mui/material/CircularProgress';
+import axios from '../axiosConfig'
+import { useNavigate } from 'react-router-dom'; //for navigation
 
 const NewProductComponent = () => {
+  const navigate = useNavigate();
+
   const fileInputRef = useRef(null);
   const [selectedImages, setSelectedImages] = useState([]);
   const [imgeFiles, setImageFiles] = useState([]);
-  const [selectedThumbnailId, setSelectedThumbnailId] = useState(null);
+  const [selectedThumbnailId, setSelectedThumbnailId] = useState(0);
   const [sku, setSku] = useState(null);
   const [name, setName] = useState(null);
   const [qty, setQty] = useState(null);
   const [description, setDescription] = useState(null);
+  const [dataValidation, setDataValidation] = useState(true);
+  const [loading, setLoading] = useState(false); // State to manage loading
 
-  const uploadProduct = () => {
-    const productData= {
-      "product_name":name,
-      "sku":sku,
-      "quantity":qty,
-      "product_discription":description,
-      "thumbnail":"",
-      "product_images":[],
-      "price":"$24.00"
+  const handleSkuChange = (event) => {
+    setSku(event.target.value);
+  };
+  const handleNameChange = (event) => {
+    setName(event.target.value);
+  };
+  const handleQtyChange = (event) => {
+    setQty(event.target.value);
+  };
+  const handleDescriptionChange = (event) => {
+    setDescription(event.target.value);
+  };
 
+  const uploadProduct = async () => {
+
+    if (!sku || !name || !qty || !description || imgeFiles.length === 0) {
+      setDataValidation(false);
+    } else {
+      setLoading(true);
+      var imageIds = [];
+      for (const img of imgeFiles) {
+        const formData = new FormData();
+        formData.append('image', img);
+
+        await axios.post('/api/product/upload', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }).then((response) => {
+          console.log('Image Uploaded', response.data.image_id);
+          imageIds.push(response.data.image_id);
+        }).catch((error) => {
+          console.error('There was an error!', error);
+        });
+      }
+
+      console.log('Image Ids: ', imageIds);
+      const productData = {
+        "product_name": name,
+        "sku": sku,
+        "quantity": qty,
+        "product_discription": description,
+        "thumbnail": imageIds[selectedThumbnailId],
+        "product_images": imageIds,
+        "price": "$24.00"
+
+      }
+      console.log('Product Uploaded', productData);
+
+      await axios.post('/api/product/add_product', productData).then((response) => {
+        console.log('Product Uploaded', response.data);
+        navigate('/');
+      }).catch((error) => {
+        console.error('There was an error!', error);
+        setDataValidation(false);
+      }).finally(() => {
+        setLoading(false);
+      });
     }
-    console.log('Product Uploaded');
+
   }
 
 
@@ -54,7 +109,7 @@ const NewProductComponent = () => {
                 <p>SKU</p>
               </Grid>
               <Grid item xs={10}>
-                <TextField variant="outlined" size="small" onChange={setSku} value={sku} sx={{
+                <TextField variant="outlined" size="small" onChange={handleSkuChange} value={sku} sx={{
                   width: '100%',
                   height: '35px',
                   marginTop: '8px',
@@ -85,7 +140,7 @@ const NewProductComponent = () => {
                 <p>Name</p>
               </Grid>
               <Grid item xs={10}>
-                <TextField variant="outlined" size="small" onChange={setName} value={name} sx={{
+                <TextField variant="outlined" size="small" onChange={handleNameChange} value={name} sx={{
                   width: '100%',
                   height: '35px',
                   marginTop: '8px',
@@ -115,7 +170,7 @@ const NewProductComponent = () => {
                 <p>QTY</p>
               </Grid>
               <Grid item xs={10}>
-                <TextField variant="outlined" size="small" type="number" onChange={setQty} value={qty} sx={{
+                <TextField variant="outlined" size="small" type="number" onChange={handleQtyChange} value={qty} sx={{
                   width: '100%',
                   height: '35px',
                   marginTop: '8px',
@@ -145,7 +200,7 @@ const NewProductComponent = () => {
           multiline
           rows={3}
           variant="outlined"
-          onChange={setDescription} value={description}
+          onChange={handleDescriptionChange} value={description}
           sx={{
             width: '100%',
             // height: '35px',
@@ -200,9 +255,16 @@ const NewProductComponent = () => {
         </Grid>
       </Box>
       <div style={{ textAlign: 'right' }}>
-      <Button variant="contained" onClick={uploadProduct} sx={{ backgroundColor: '#001EB9', '&:hover': { backgroundColor: '#001EB9' }, textTransform: 'none', width: '175px' }}>
-        Add Product
-      </Button>
+        {dataValidation ? null :
+          <Box mb={2}>
+            <Alert severity="error" >Please fill all the feilds and upload images.</Alert>
+          </Box>
+        }
+        <Button disabled={loading} variant="contained" onClick={uploadProduct} sx={{ backgroundColor: '#001EB9', '&:hover': { backgroundColor: '#001EB9' }, textTransform: 'none', width: '175px' }}>
+        {loading && <CircularProgress size={24} style={{ position: 'absolute' }} />}
+          Add Product
+        </Button>
+
       </div>
     </div>
   );

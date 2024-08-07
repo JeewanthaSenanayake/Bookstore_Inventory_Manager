@@ -4,7 +4,8 @@ export const ecomstorageSlice = createSlice({
   name: 'ecomstorage',
   initialState: {
     vendorData:{},
-    rowData:[]
+    rowData:[],
+    searchResults:[]
   },
   reducers: {  
     setVendorData: (state, action) => {
@@ -27,10 +28,14 @@ export const ecomstorageSlice = createSlice({
       console.log("Data Id->",action.payload)
       state.rowData = state.rowData.filter((row) => row.id !== action.payload);
     },
+    setSearchResults: (state, action) => {
+      console.log("Search->",action.payload)
+      state.searchResults = action.payload
+    },
   },
 })
 
-// Action creators are generated for each case reducer function
-export const { setVendorData,setRowData,updateFavorite,romoveFavorite } = ecomstorageSlice.actions
+
+export const { setVendorData,setRowData,updateFavorite,romoveFavorite,setSearchResults } = ecomstorageSlice.actions
 
 export default ecomstorageSlice.reducer

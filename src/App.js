@@ -8,6 +8,7 @@ import HomeView from './views/HomeView';
 import NewProduct from './views/newProductView';
 import FavouriteProduct from './views/FavouriteProduct';
 import EditeProduct from './views/EditeProduct';
+import SearchResults from './components/SearchResults';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path='/new-product' element={<NewProduct />} />
         <Route path='/favourite-product' element={<FavouriteProduct />} />
         <Route path='/edit-product' element={<EditeProduct />} />
+        <Route path='/search' element={<SearchResults />} />
       </Routes>
     </div>
   );

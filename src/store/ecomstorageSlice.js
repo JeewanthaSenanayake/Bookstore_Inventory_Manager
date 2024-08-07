@@ -14,10 +14,23 @@ export const ecomstorageSlice = createSlice({
       console.log("Data->",action.payload)
       state.rowData = action.payload
     },
+    updateFavorite: (state, action) => {
+      console.log("Data Id->",action.payload)
+      state.rowData.map((row)=>{
+        if(row.id === action.payload){
+          row.favourite = !row.favourite
+        }
+      }
+      );
+    },
+    romoveFavorite: (state, action) => {
+      console.log("Data Id->",action.payload)
+      state.rowData = state.rowData.filter((row) => row.id !== action.payload);
+    },
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { setVendorData,setRowData } = ecomstorageSlice.actions
+export const { setVendorData,setRowData,updateFavorite,romoveFavorite } = ecomstorageSlice.actions
 
 export default ecomstorageSlice.reducer

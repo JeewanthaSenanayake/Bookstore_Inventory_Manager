@@ -16,7 +16,7 @@ const FavouriteProduct = () => {
         const fetchUserData = async () => {
 
             //get product data
-            await axios.get('/api/product/get_products')
+            await axios.get('/api/product/favourite_products')
                 .then(async (response) => {
                     console.log(response.data);
                     var rowDataFinal = [];
@@ -30,7 +30,8 @@ const FavouriteProduct = () => {
                                 sku: element.sku,
                                 thumbnail: imageUrl.toString(),
                                 product_name: element.product_name,
-                                price: element.price
+                                price: element.price,
+                                favourite: element.favourite
                             };
                             rowDataFinal.push(rowData);
                         })
@@ -59,7 +60,7 @@ const FavouriteProduct = () => {
                     <CircularProgress />
                 </Box>
                 :
-                <TableComponent />
+                <TableComponent isFromFav={true} />
             }
         </Box>
   );

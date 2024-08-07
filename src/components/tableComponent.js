@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { DataGrid } from '@mui/x-data-grid';
 import { Box } from '@mui/material';
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { updateFavorite, romoveFavorite } from '../store/ecomstorageSlice'
 
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
@@ -13,8 +14,9 @@ import axios from "../axiosConfig";
 import { useNavigate } from 'react-router-dom'; //for navigation
 
 
-const TableComponent = () => {
+const TableComponent = ({ isFromFav }) => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const columns = [
         { field: 'sku', headerName: 'SKU', width: 220 },
@@ -32,28 +34,32 @@ const TableComponent = () => {
             field: 'price', width: 220, headerName: 'PRICE', headerAlign: 'center', align: 'center'
         },
         {
-            field: 'id', headerName: '', width: 220, headerAlign: 'right', align: 'right', renderCell: (params) => (
-                <Box gap={1}>
-                    <img
-                        src="/images/delete-icon.svg"
-                        alt="Avatar"
-                        style={{ width: 18, height: 18, marginRight: 7 }}
-                        onClick={() => handleClickOpen(params.value)}
-                    />
-                    <img
-                        src="/images/edit-icon.svg"
-                        alt="Avatar"
-                        style={{ width: 18, height: 18, marginRight: 7 }}
-                        onClick={() => handleEdit(params.value)}
-                    />
-                    <img
-                        src="/images/starred.svg"
-                        alt="Avatar"
-                        style={{ width: 18, height: 18, marginRight: 7 }}
-                    />
-                </Box>
+            field: 'id', headerName: '', width: 220, headerAlign: 'right', align: 'right', renderCell: (params) => {
+                const favourite = params.row.favourite;
+                return (
+                    <Box gap={1}>
+                        <img
+                            src="/images/delete-icon.svg"
+                            alt="Avatar"
+                            style={{ width: 18, height: 18, marginRight: 7 }}
+                            onClick={() => handleClickOpen(params.value)}
+                        />
+                        <img
+                            src="/images/edit-icon.svg"
+                            alt="Avatar"
+                            style={{ width: 18, height: 18, marginRight: 7 }}
+                            onClick={() => handleEdit(params.value)}
+                        />
+                        <img
+                            src={favourite ? "/images/starred.svg" : "/images/star.svg"}
+                            alt="Avatar"
+                            style={{ width: 18, height: 18, marginRight: 7 }}
+                            onClick={() => handleFavourite(params.value, favourite)}
+                        />
+                    </Box>
 
-            ),
+                );
+            },
         },
 
     ];
@@ -70,6 +76,27 @@ const TableComponent = () => {
     const [open, setOpen] = useState(false);
     const [selectedId, setSelectedId] = useState(null)
 
+    //Update favourite status
+    const handleFavourite = async (id, fav) => {
+        //true for favourite vies and false for home views
+        if (isFromFav) {
+            dispatch(romoveFavorite(id))
+        } else {
+            dispatch(updateFavorite(id));
+        }
+        console.log('Favourite')
+        console.log(id)
+        fav = !fav
+        await axios.put(`/api/product/add_favourite_products/${id}/${fav}`).then((res) => {
+            console.log(res.data)
+            if (res.data.status === 'success') {
+                console.log('Favourite')
+            }
+        }).catch((err) => {
+            console.log(err)
+        });
+    }
+
     const handleClickOpen = (id) => {
         console.log(id)
         setSelectedId(id)
@@ -84,7 +111,7 @@ const TableComponent = () => {
 
         await axios.delete(`http://localhost:5000/api/product/delete_products/${selectedId}`).then((res) => {
             console.log(res.data)
-            if(res.data.status === 'success'){
+            if (res.data.status === 'success') {
                 setOpen(false);
                 console.log('Deleted')
 

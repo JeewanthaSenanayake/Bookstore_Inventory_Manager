@@ -51,7 +51,8 @@ const Home = () => {
                                 sku: element.sku,
                                 thumbnail: imageUrl.toString(),
                                 product_name: element.product_name,
-                                price: element.price
+                                price: element.price,
+                                favourite: element.favourite
                             };
                             rowDataFinal.push(rowData);
                         })
@@ -82,7 +83,7 @@ const Home = () => {
                     <CircularProgress />
                 </Box>
                 :
-                <TableComponent />
+                <TableComponent isFromFav={false} />
             }
         </Box>
     );

@@ -3,13 +3,20 @@ import { Grid, TextField, Button, Box, InputAdornment } from '@mui/material';
 // import { styled } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
 
+import { useNavigate } from 'react-router-dom'; //for navigation
+
 const SearchBar = () => {
+    const navigate = useNavigate();
     const [searchValue, setsearchValue] = useState('');
     const handleChange = (event) => {
         setsearchValue(event.target.value);
     };
     const serchProduct=()=>{
         console.log(searchValue);
+    }
+    const newProductBtn=()=>{
+        console.log('new product');
+        navigate('/new-product');
     }
     return (
         <div>
@@ -53,7 +60,7 @@ const SearchBar = () => {
                 <Grid item xs={2}></Grid>
                 <Grid item xs={3}>
                     <Box display="flex" gap={2} mt={1}>
-                        <Button variant="contained" sx={{ backgroundColor: '#001EB9', '&:hover': { backgroundColor: '#001EB9' }, textTransform: 'none', width: '175px' }}>
+                        <Button variant="contained" onClick={newProductBtn} sx={{ backgroundColor: '#001EB9', '&:hover': { backgroundColor: '#001EB9' }, textTransform: 'none', width: '175px' }}>
                             New Product
                         </Button>
                         <Button variant="outlined" sx={{ borderColor: '#001EB9', textTransform: 'none' }}>

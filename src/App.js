@@ -2,8 +2,10 @@
 import './App.css';
 import React from 'react';
 // import { Route, Switch } from 'react-router-dom';
-import HomeView from './views/HomeView';
 import { Route, Routes } from 'react-router-dom';
+
+import HomeView from './views/HomeView';
+import NewProduct from './views/newProductView';
 
 function App() {
   return (
@@ -22,14 +24,15 @@ function App() {
           Learn React
         </a>
       </header> */}
-      
+
       {/* <HomeView /> */}
-      
+
       <Routes>
-         <Route path='/' element={<HomeView/>} />
-         {/* <Route path='/about' element={<About/>} />
+        <Route path='/' element={<HomeView />} />
+        <Route path='/new-product' element={<NewProduct />} />
+        {/* <Route path='/about' element={<About/>} />
          <Route path='/contact' element={<Contact/>} /> */}
-       </Routes>
+      </Routes>
     </div>
   );
 }

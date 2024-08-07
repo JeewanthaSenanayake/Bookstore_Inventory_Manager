@@ -1,6 +1,7 @@
+### `Before running the project, add the backend server baseURL to axiosConfig.js file`
+
 # Getting Started with Create React App
 
-Before running the project, add the backend server baseURL to axiosConfig.js file
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

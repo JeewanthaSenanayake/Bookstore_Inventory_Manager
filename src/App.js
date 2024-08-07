@@ -6,6 +6,8 @@ import { Route, Routes } from 'react-router-dom';
 
 import HomeView from './views/HomeView';
 import NewProduct from './views/newProductView';
+import FavouriteProduct from './views/FavouriteProduct';
+import EditeProduct from './views/EditeProduct';
 
 function App() {
   return (
@@ -14,6 +16,8 @@ function App() {
       <Routes>
         <Route path='/' element={<HomeView />} />
         <Route path='/new-product' element={<NewProduct />} />
+        <Route path='/favourite-product' element={<FavouriteProduct />} />
+        <Route path='/edit-product' element={<EditeProduct />} />
       </Routes>
     </div>
   );

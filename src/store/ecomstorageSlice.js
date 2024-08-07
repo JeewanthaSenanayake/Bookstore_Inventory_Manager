@@ -11,6 +11,7 @@ export const ecomstorageSlice = createSlice({
       state.vendorData = action.payload
     },
     setRowData: (state, action) => {
+      console.log("Data->",action.payload)
       state.rowData = action.payload
     },
   },

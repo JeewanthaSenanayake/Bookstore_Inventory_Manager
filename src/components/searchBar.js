@@ -14,6 +14,11 @@ const SearchBar = () => {
     const serchProduct=()=>{
         console.log(searchValue);
     }
+    const favouriteProductBtn=()=>{
+        console.log('favourite product');
+        navigate('/favourite-product')
+    }
+
     const newProductBtn=()=>{
         console.log('new product');
         navigate('/new-product');
@@ -63,7 +68,7 @@ const SearchBar = () => {
                         <Button variant="contained" onClick={newProductBtn} sx={{ backgroundColor: '#001EB9', '&:hover': { backgroundColor: '#001EB9' }, textTransform: 'none', width: '175px' }}>
                             New Product
                         </Button>
-                        <Button variant="outlined" sx={{ borderColor: '#001EB9', textTransform: 'none' }}>
+                        <Button variant="outlined" onClick={favouriteProductBtn} sx={{ borderColor: '#001EB9', textTransform: 'none' }}>
                             <img src="/images/starred.svg" alt="icon" />
                         </Button>
                     </Box>

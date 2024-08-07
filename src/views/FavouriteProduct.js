@@ -1,45 +1,24 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux'
-import { setVendorData, setRowData } from '../store/ecomstorageSlice'
-import axios from '../axiosConfig';
+import React,{ useEffect, useState } from "react";
 import { Box } from '@mui/material';
-import CircularProgress from '@mui/material/CircularProgress';
-
 import AppBar from './AppBar';
 import SearchBar from '../components/searchBar';
+import CircularProgress from '@mui/material/CircularProgress';
 import TableComponent from '../components/tableComponent';
+import axios from '../axiosConfig';
+import { useDispatch } from 'react-redux'
+import {setRowData } from '../store/ecomstorageSlice'
 
-const Home = () => {
-
-    const dispatch = useDispatch();
-
+const FavouriteProduct = () => {
     const [tableLoading, setTableLoading] = useState(true)
+    const dispatch = useDispatch();
 
     useEffect(() => {
         const fetchUserData = async () => {
-            console.log('fetchUserData');
-            /*create a vendor for development, requirment is only for a vender, 
-              there for not develop authentication and authoraisation
-              and also get vendor data, name and id. it save in redux store
-              */
-            await axios.post('/api/vendor/create_vendor', { "name": "ADMIN" })
-                .then((response) => {
-                    let udata = {
-                        uname: response.data.name,
-                        uid: response.data.uid
-                    }
-                    dispatch(setVendorData(udata));
-                   
-
-                })
-                .catch((error) => {
-                    console.error('There was an error!', error);
-                });
 
             //get product data
             await axios.get('/api/product/get_products')
                 .then(async (response) => {
-                    
+                    console.log(response.data);
                     var rowDataFinal = [];
                     for (const element of response.data) {
                         //get image acording to product
@@ -68,13 +47,11 @@ const Home = () => {
         fetchUserData();
     }, [dispatch]);
 
-
-
-    return (
-        <Box m={4} ml={8} mr={8}>
-            <AppBar />
+  return (
+    <Box m={4} ml={8} mr={8}>
+             <AppBar />
             <Box textAlign="left">
-                <h1 style={{ color: "#162427" }}>PRODUCTS</h1>
+                <h1 style={{ color: "#162427" }}>FAVOURITE PRODUCTS</h1>
                 <SearchBar />
             </Box>
             {tableLoading ?
@@ -85,7 +62,8 @@ const Home = () => {
                 <TableComponent />
             }
         </Box>
-    );
+  );
 };
 
-export default Home;
+export default FavouriteProduct;
+
